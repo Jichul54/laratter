@@ -39,12 +39,13 @@ class TweetController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request  $request)
     {
         // バリデーション
         $validator = Validator::make($request->all(), [
             'tweet' => 'required | max:191',
             'description' => 'required',
+            'image' => 'required'
         ]);
         // バリデーション:エラー
         if ($validator->fails()) {
@@ -55,8 +56,20 @@ class TweetController extends Controller
         }
         // create()は最初から用意されている関数
         // 戻り値は挿入されたレコードの情報
+
+        $newImageName = time() . '-' . $request->tweet . '.' . $request->image->extension();
+
+        $request->image->move(public_path('images'), $newImageName);
+
         $data = $request->merge(['user_id' => Auth::user()->id])->all();
-        $result = Tweet::create($data);
+        $result = Tweet::create([
+            'tweet' => $request->input('tweet'),
+            'description' => $request->input('description'),
+            'user_id' => Auth::user()->id,
+            'image' => $newImageName
+        ]);
+        dd($result);
+
         // ルーティング「todo.index」にリクエスト送信（一覧ページに移動）
         return redirect()->route('tweet.index');
     }

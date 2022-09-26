@@ -59,6 +59,11 @@
                     <h3 class="text-left font-bold text-lg text-grey-dark">{{$tweet->tweet}}</h3>
                   </a>
 
+                  <img 
+                    src="{{ asset('images/'.$tweet->image) }}" 
+                    class="w-8/12 mb-8 shadow-xl"
+                    alt="">
+
                   <div class="flex">
                     <!-- favorite 状態で条件分岐 -->
                     @if($tweet->users()->where('user_id', Auth::id())->exists())
