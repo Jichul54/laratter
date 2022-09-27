@@ -68,7 +68,6 @@ class TweetController extends Controller
             'user_id' => Auth::user()->id,
             'image' => $newImageName
         ]);
-        dd($result);
 
         // ルーティング「todo.index」にリクエスト送信（一覧ページに移動）
         return redirect()->route('tweet.index');
